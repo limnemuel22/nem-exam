@@ -1,11 +1,23 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Todos</router-link>|
-    <router-link to="/users">Users</router-link>|
-    <router-link to="/photos">Photos</router-link>
+  <div>
+    <nav id="nav">
+      <Header />
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+      <router-view />
+    </div>
   </div>
-  <router-view />
 </template>
+
+<script>
+import Header from "./components/Header";
+
+export default {
+  components: {
+    Header,
+  },
+};
+</script>
 
 <style>
 #app {
@@ -18,6 +30,7 @@
 
 #nav {
   padding: 30px;
+  border: 1rem;
 }
 
 #nav a {

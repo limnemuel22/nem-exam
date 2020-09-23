@@ -1,12 +1,12 @@
 <template>
-  <div class="todos"><h1>Todos</h1></div>
+  <div class="home"><img alt="Vue logo" src="../assets/logo.png" /></div>
 </template>
 
 <script>
 // @ is an alias to /src
 
 export default {
-  name: "Todos",
+  name: "Home",
   components: {},
 };
 </script>
