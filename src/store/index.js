@@ -9,10 +9,13 @@ const mutations = {
   increment(state) {
     state.count++;
   },
-  addUsers(state, payload) {
+  createUsers(state, payload) {
     state.users = payload;
   },
   editUser(state, payload) {
+    state.users = payload;
+  },
+  deleteUser(state, payload) {
     state.users = payload;
   },
 };
