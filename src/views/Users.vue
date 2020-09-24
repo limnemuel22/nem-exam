@@ -4,7 +4,6 @@
   </div>
   <div class="container-fluid users" v-if="users.length > 0">
     <div class="col-md-12 mb-5" v-if="isFormShow">
-      <!-- <AddUser v-bind:currentUser="currentUser" /> -->
       <h1 class="text-left">{{ action }} new User</h1>
       <form>
         <div class="row text-left">
@@ -69,7 +68,6 @@
 import { computed } from "vue";
 import { useStore } from "vuex";
 import axios from "axios";
-//import AddUser from "../components/AddUser";
 import UserList from "../components/UserList";
 
 export default {
@@ -84,14 +82,12 @@ export default {
       websiteErrorMessage: "",
       successMessage: "",
       isFormShow: false,
-      //  currentUser: [],
       tableHeaders: ["Name", "Email", "Website", "Action"],
       action: "Add",
     };
   },
   setup() {
     const store = useStore();
-    // const count = computed(() => store.state.count);
     const users = computed(() => store.state.users);
 
     function createUsers(data) {
@@ -107,32 +103,36 @@ export default {
     }
 
     function editUser(id, name, email, website) {
-      const temp = users.value.map((q) => {
-        if (id === q.id) {
-          return {
-            ...q,
-            name,
-            email,
-            website,
-          };
-        } else {
-          return q;
-        }
-      });
-
-      store.commit("editUser", temp);
+      axios.put(`https://jsonplaceholder.typicode.com/users/${id}`, { name, email, website }).then(
+        ({ data }) => {
+          const temp = users.value.map((q) => {
+            if (data.id === q.id) {
+              return {
+                ...q,
+                name: data.name,
+                email: data.email,
+                website: data.website,
+              };
+            } else {
+              return q;
+            }
+          });
+          store.commit("editUser", temp);
+        },
+        (err) => console.log(err)
+      );
     }
 
     function deleteUser(id) {
-      const temp = users.value.filter((q) => {
-        return q.id !== id;
-      });
-      store.commit("deleteUser", temp);
+      axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`).then(
+        (res) => {
+          console.log(res);
+          const temp = users.value.filter((q) => q.id !== id);
+          store.commit("deleteUser", temp);
+        },
+        (error) => console.log(error)
+      );
     }
-
-    // function increment() {
-    //   store.commit("increment");
-    // }
 
     return {
       createUsers,
@@ -140,8 +140,6 @@ export default {
       editUser,
       deleteUser,
       users,
-      // count,
-      // increment,
     };
   },
   async mounted() {
@@ -214,7 +212,6 @@ export default {
   },
   name: "Users",
   components: {
-    // AddUser,
     UserList,
   },
 };
