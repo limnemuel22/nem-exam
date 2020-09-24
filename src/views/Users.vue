@@ -1,5 +1,8 @@
 <template>
-  <div class="container-fluid users">
+  <div v-if="users.length <= 0">
+    <i class="fa fa-gear fa-spin fa-5x loader"></i>
+  </div>
+  <div class="container-fluid users" v-if="users.length > 0">
     <div class="col-md-12 mb-5" v-if="isFormShow">
       <!-- <AddUser v-bind:currentUser="currentUser" /> -->
       <h1 class="text-left">{{ action }} new User</h1>
@@ -96,7 +99,11 @@ export default {
     }
 
     function addUser(name, email, website) {
-      store.commit("addUser", { id: users.value.length + 1, name, email, website });
+      const data = { id: users.value.length + 1, name, email, website };
+      axios.post(`https://jsonplaceholder.typicode.com/users`, data).then(
+        ({ data }) => store.commit("addUser", data),
+        (err) => console.log(err)
+      );
     }
 
     function editUser(id, name, email, website) {
@@ -212,3 +219,14 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.loader {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+}
+</style>
