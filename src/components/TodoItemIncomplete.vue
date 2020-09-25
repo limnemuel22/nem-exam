@@ -7,7 +7,7 @@
         }}</span>
       </div>
       <div class="col-md-2">
-        <button class="btn btn-danger del" @click="$emit('delete-todo', todo.id)">X</button>
+        <button class="btn btn-danger del" @click="$emit('delete-todo', todo.id)"><i class="fa fa-times"></i></button>
       </div>
     </div>
   </div>
@@ -50,7 +50,6 @@ export default {
 .del {
   color: #fff;
   border: none;
-  padding: 5px 9px;
   border-radius: 50%;
   cursor: pointer;
   float: right;
