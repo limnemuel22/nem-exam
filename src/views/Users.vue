@@ -37,12 +37,10 @@
             <small class="text-danger" v-if="websiteErrorMessage">{{ websiteErrorMessage }}</small>
           </div>
 
-          <!--   <div class="form-group   mr-3"> -->
           <div class="col-md-12">
             <button type="submit" class="btn btn-secondary pull-right" @click="cancel">Cancel</button>
             <button type="submit" class="btn btn-success mr-2 pull-right" @click="submit">Submit</button>
           </div>
-          <!--   </div> -->
         </div>
       </form>
     </div>
@@ -52,6 +50,7 @@
       <div class="p-3 mb-2 bg-success text-white text-left" v-if="successMessage">
         User is Successfully {{ successMessage }}
       </div>
+      <span class="pull-left ml-4"><h1>User List</h1></span>
       <div class="row pull-right mb-1 mr-3">
         <button type="submit" v-if="!isFormShow" class="btn btn-success" @click="addForm">
           <i class="fa fa-plus"></i> Add User
@@ -101,7 +100,7 @@ export default {
       const data = { id: users.value.length + 1, name, email, website };
       axios.post(`https://jsonplaceholder.typicode.com/users`, data).then(
         ({ data }) => store.commit("addUser", data),
-        (err) => console.log(err)
+        (error) => console.log(error)
       );
     }
 
@@ -122,7 +121,7 @@ export default {
           });
           store.commit("editUser", temp);
         },
-        (err) => console.log(err)
+        (error) => console.log(error)
       );
     }
 
@@ -221,6 +220,11 @@ export default {
 </script>
 
 <style scoped>
+.add-form {
+  padding: 1rem 1rem 1rem 0rem;
+  margin-right: 2rem;
+  max-width: 93%;
+}
 .loader {
   margin: 0;
   position: absolute;
@@ -228,10 +232,5 @@ export default {
   left: 50%;
   margin-right: -50%;
   transform: translate(-50%, -50%);
-}
-.add-form {
-  padding: 1rem 1rem 1rem 0rem;
-  margin-right: 2rem;
-  max-width: 93%;
 }
 </style>

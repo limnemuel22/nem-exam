@@ -3,6 +3,7 @@ import { createStore } from "vuex";
 const state = {
   count: 0,
   users: [],
+  todos: [],
 };
 
 const mutations = {
@@ -20,6 +21,15 @@ const mutations = {
   },
   deleteUser(state, payload) {
     state.users = payload;
+  },
+  createTodos(state, payload) {
+    state.todos = payload;
+  },
+  addTodo(state, payload) {
+    state.todos.push(payload);
+  },
+  deleteTodo(state, payload) {
+    state.todos = payload;
   },
 };
 
