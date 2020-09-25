@@ -2,7 +2,7 @@
   <div v-if="users.length <= 0">
     <i class="fa fa-gear fa-spin fa-5x loader"></i>
   </div>
-  <div class="container-fluid users" v-if="users.length > 0">
+  <div class="users" v-if="users.length > 0">
     <div class="container col-md-12 add-form" v-if="isFormShow">
       <h1 class="text-left">{{ action }} new User</h1>
       <form>
@@ -221,9 +221,10 @@ export default {
 
 <style scoped>
 .add-form {
-  padding: 1rem 1rem 1rem 0rem;
-  margin-right: 2rem;
-  max-width: 93%;
+  padding: 1rem 1rem 1rem 1rem;
+  max-width: 95%;
+  border: solid #444242;
+  border-radius: 7%;
 }
 .loader {
   margin: 0;

@@ -124,7 +124,6 @@ export default {
     }
 
     function editTodo(id, completed, from) {
-      console.log(from);
       from === "complete" ? (this.isLoadingIncomplete = true) : (this.isLoadingComplete = true);
       axios.put(`https://jsonplaceholder.typicode.com/users/${id}`, { completed: !completed }).then(
         ({ data }) => {
@@ -246,5 +245,9 @@ export default {
   left: 50%;
   margin-right: -50%;
   transform: translate(-50%, -50%);
+}
+.card {
+  border-radius: 7%;
+  border: solid #444242;
 }
 </style>

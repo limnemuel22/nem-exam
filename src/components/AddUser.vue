@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container-fluid">
     <h1>Add new User</h1>
     <form>
       <div class="form-group">
