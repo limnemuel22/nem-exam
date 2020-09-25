@@ -41,4 +41,16 @@ export default {
 #nav a.router-link-exact-active {
   color: #42b983;
 }
+.btn-success {
+  background-color: #3ebe84;
+}
+.btn-success:hover {
+  background-color: #35bd80;
+}
+.btn-info {
+  background-color: #5ec496;
+}
+.btn-info:hover {
+  background-color: #42b983;
+}
 </style>

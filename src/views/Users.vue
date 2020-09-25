@@ -3,7 +3,7 @@
     <i class="fa fa-gear fa-spin fa-5x loader"></i>
   </div>
   <div class="container-fluid users" v-if="users.length > 0">
-    <div class="col-md-12 mb-5" v-if="isFormShow">
+    <div class="container col-md-12 add-form" v-if="isFormShow">
       <h1 class="text-left">{{ action }} new User</h1>
       <form>
         <div class="row text-left">
@@ -36,10 +36,13 @@
             />
             <small class="text-danger" v-if="websiteErrorMessage">{{ websiteErrorMessage }}</small>
           </div>
-        </div>
-        <div class="row pull-right mr-3">
-          <button type="submit" class="btn btn-primary mr-2" @click="submit">Submit</button>
-          <button type="submit" class="btn btn-secondary" @click="cancel">Cancel</button>
+
+          <!--   <div class="form-group   mr-3"> -->
+          <div class="col-md-12">
+            <button type="submit" class="btn btn-secondary pull-right" @click="cancel">Cancel</button>
+            <button type="submit" class="btn btn-success mr-2 pull-right" @click="submit">Submit</button>
+          </div>
+          <!--   </div> -->
         </div>
       </form>
     </div>
@@ -225,5 +228,10 @@ export default {
   left: 50%;
   margin-right: -50%;
   transform: translate(-50%, -50%);
+}
+.add-form {
+  padding: 1rem 1rem 1rem 0rem;
+  margin-right: 2rem;
+  max-width: 93%;
 }
 </style>
