@@ -30,9 +30,6 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="staticBackdropLabel">Sign in with Google</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
         </div>
         <div class="modal-body">
           <div class="g-signin2" id="google-signin-btn" @click="removeDisabled" v-on:click="onSignIn"></div>
@@ -70,7 +67,10 @@ export default {
     HomeCarousel,
   },
   mounted() {
-    this.showModal();
+    const checkUser = localStorage.getItem("user");
+    if (checkUser !== "login") {
+      this.showModal();
+    }
   },
   methods: {
     showModal() {
@@ -87,6 +87,7 @@ export default {
     },
     closeModal() {
       const button = document.getElementById("closeModalSignin");
+      localStorage.setItem("user", "login");
       setTimeout(function() {
         button.click();
       }, 1000);
