@@ -35,9 +35,10 @@ export default {
 <style scoped>
 .image {
   min-height: 22rem;
+  max-height: 22rem;
 }
 
-.edit:hover {
+.a:hover {
   color: #000000;
   cursor: pointer;
 }
@@ -48,7 +49,7 @@ export default {
   color: #000000;
   cursor: pointer;
 }
-.delete:focus {
+.a:focus {
   color: rgb(194, 49, 23);
 }
 </style>

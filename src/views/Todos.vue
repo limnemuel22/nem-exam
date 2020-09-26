@@ -238,7 +238,7 @@ export default {
   margin-right: -50%;
   transform: translate(-50%, -50%);
 }
-.todos-loader {
+.mini-loader {
   margin: 0;
   position: absolute;
   top: 50%;

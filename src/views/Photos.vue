@@ -1,5 +1,5 @@
 <template>
-  <div v-if="photos.length <= 0">
+  <div v-if="photos.length <= 0 || isLoading">
     <i class="fa fa-gear fa-spin fa-5x loader"></i>
   </div>
   <div class="container photos" v-if="photos.length > 0">
@@ -21,13 +21,13 @@
           </div>
           <div class="form-group col-md-4">
             <label for="Url">Url</label>
-            <input type="text" class="form-control" id="url" v-model="currentUrl" placeholder="Enter Url" required />
+            <input type="url" class="form-control" id="url" v-model="currentUrl" placeholder="Enter Url" required />
             <small class="text-danger" v-if="urlErrorMessage">{{ urlErrorMessage }}</small>
           </div>
           <div class="form-group col-md-4">
             <label for="Thumbnail">Thumbnail</label>
             <input
-              type="text"
+              type="url"
               class="form-control"
               id="thumbnail"
               v-model="currentThumbnail"
@@ -57,7 +57,12 @@
     </div>
     <div class="row">
       <div class="col-md-4" v-bind:key="photo.id" v-for="photo in photos">
-        <PhotoList v-bind:photo="photo" v-on:edit-photo="onEditClick" v-on:delete-photo="onDeleteClick" />
+        <PhotoList
+          v-if="!isLoading"
+          v-bind:photo="photo"
+          v-on:edit-photo="onEditClick"
+          v-on:delete-photo="onDeleteClick"
+        />
       </div>
     </div>
   </div>
@@ -83,6 +88,7 @@ export default {
       thumbnailErrorMessage: "",
       successMessage: "",
       isFormShow: false,
+      isLoading: false,
     };
   },
 
@@ -99,14 +105,22 @@ export default {
     }
 
     function addPhoto(title, url, thumbnailUrl) {
+      this.isLoading = true;
       const data = { title, url, thumbnailUrl };
       axios.post(`https://jsonplaceholder.typicode.com/photos`, data).then(
-        ({ data }) => store.commit("addPhoto", data),
-        (error) => console.log(error)
+        ({ data }) => {
+          store.commit("addPhoto", data);
+          this.isLoading = false;
+        },
+        (error) => {
+          console.log(error);
+          this.isLoading = false;
+        }
       );
     }
 
     function editPhoto(id, title, url, thumbnailUrl) {
+      this.isLoading = true;
       axios.put(`https://jsonplaceholder.typicode.com/photos/${id}`, { title, url, thumbnailUrl }).then(
         ({ data }) => {
           const temp = photos.value.map((q) => {
@@ -122,19 +136,28 @@ export default {
             }
           });
           store.commit("editPhoto", temp);
+          this.isLoading = false;
         },
-        (error) => console.log(error)
+        (error) => {
+          console.log(error);
+          this.isLoading = false;
+        }
       );
     }
 
     function deletePhoto(id) {
+      this.isLoading = true;
       axios.delete(`https://jsonplaceholder.typicode.com/photos/${id}`).then(
         (res) => {
           console.log(res);
           const temp = photos.value.filter((q) => q.id !== id);
           store.commit("deletePhoto", temp);
+          this.isLoading = false;
         },
-        (error) => console.log(error)
+        (error) => {
+          console.log(error);
+          this.isLoading = false;
+        }
       );
     }
 
@@ -171,6 +194,7 @@ export default {
       this.currentThumbnail = thumbnail;
     },
     onDeleteClick(id) {
+      this.isFormShow = false;
       this.deletePhoto(id);
       this.successMessage = "Deleted!";
       setTimeout(() => {

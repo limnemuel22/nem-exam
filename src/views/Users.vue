@@ -9,31 +9,20 @@
         <div class="row text-left">
           <div class="form-group col-md-4">
             <label for="Name">Name</label>
-            <input
-              type="text"
-              class="form-control"
-              id="name"
-              v-model="currentName"
-              placeholder="Enter Name"
-              required
-            />
-            <small class="text-danger" v-if="nameErrorMessage">{{
-              nameErrorMessage
-            }}</small>
+            <input type="text" class="form-control" id="name" v-model="currentName" placeholder="Enter Name" required />
+            <small class="text-danger" v-if="nameErrorMessage">{{ nameErrorMessage }}</small>
           </div>
           <div class="form-group col-md-4">
             <label for="exampleInputPassword1">Email</label>
             <input
-              type="text"
+              type="email"
               class="form-control"
               id="email"
               v-model="currentEmail"
               placeholder="Enter Email"
               required
             />
-            <small class="text-danger" v-if="emailErrorMessage">{{
-              emailErrorMessage
-            }}</small>
+            <small class="text-danger" v-if="emailErrorMessage">{{ emailErrorMessage }}</small>
           </div>
           <div class="form-group col-md-4">
             <label for="exampleInputPassword1">Website</label>
@@ -45,26 +34,12 @@
               placeholder="Enter Website"
               required
             />
-            <small class="text-danger" v-if="websiteErrorMessage">{{
-              websiteErrorMessage
-            }}</small>
+            <small class="text-danger" v-if="websiteErrorMessage">{{ websiteErrorMessage }}</small>
           </div>
 
           <div class="col-md-12">
-            <button
-              type="submit"
-              class="btn btn-secondary pull-right"
-              @click="cancel"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              class="btn btn-success mr-2 pull-right"
-              @click="submit"
-            >
-              Submit
-            </button>
+            <button type="submit" class="btn btn-secondary pull-right" @click="cancel">Cancel</button>
+            <button type="submit" class="btn btn-success mr-2 pull-right" @click="submit">Submit</button>
           </div>
         </div>
       </form>
@@ -72,20 +47,12 @@
     <br />
 
     <div class="col-md-12">
-      <div
-        class="p-3 mb-2 bg-success text-white text-left"
-        v-if="successMessage"
-      >
+      <div class="p-3 mb-2 bg-success text-white text-left" v-if="successMessage">
         User is Successfully {{ successMessage }}
       </div>
       <span class="pull-left ml-4"><h1>User List</h1></span>
       <div class="row pull-right mb-1 mr-3">
-        <button
-          type="submit"
-          v-if="!isFormShow"
-          class="btn btn-success"
-          @click="addForm"
-        >
+        <button type="submit" v-if="!isFormShow" class="btn btn-success" @click="addForm">
           <i class="fa fa-plus"></i> Add User
         </button>
       </div>
@@ -177,7 +144,14 @@ export default {
       );
     }
 
+    function validateEmail(email) {
+      return /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+        email
+      );
+    }
+
     return {
+      validateEmail,
       createUsers,
       addUser,
       editUser,
@@ -186,9 +160,7 @@ export default {
     };
   },
   async mounted() {
-    const { data } = await axios.get(
-      "https://jsonplaceholder.typicode.com/users?_limit=5"
-    );
+    const { data } = await axios.get("https://jsonplaceholder.typicode.com/users?_limit=5");
     this.createUsers(data);
   },
   methods: {
@@ -208,6 +180,7 @@ export default {
       this.currentWebsite = website;
     },
     onDeleteClick(id) {
+      this.isFormShow = false;
       this.deleteUser(id);
       this.successMessage = "Deleted!";
       setTimeout(() => {
@@ -220,25 +193,21 @@ export default {
     },
     submit(e) {
       e.preventDefault();
-      this.currentName === ""
-        ? (this.nameErrorMessage = "Name is required!")
-        : (this.nameErrorMessage = "");
+      this.currentName === "" ? (this.nameErrorMessage = "Name is required!") : (this.nameErrorMessage = "");
 
-      this.currentEmail === ""
-        ? (this.emailErrorMessage = "Email is required!")
-        : (this.emailErrorMessage = "");
+      this.currentEmail === "" ? (this.emailErrorMessage = "Email is required!") : (this.emailErrorMessage = "");
       this.currentWebsite === ""
         ? (this.websiteErrorMessage = "Website is required!")
         : (this.websiteErrorMessage = "");
 
-      if (
-        this.currentName === "" ||
-        this.currentEmail === "" ||
-        this.currentWebsite === ""
-      ) {
+      if (this.currentName === "" || this.currentEmail === "" || this.currentWebsite === "") {
         return;
       }
       if (!this.currentId || this.currentId === "") {
+        console.log(this.validateEmail(this.validateEmail));
+        if (this.validateEmail(this.validateEmail) === false) {
+          return (this.emailErrorMessage = "Email is not valid!");
+        }
         this.addUser(this.currentName, this.currentEmail, this.currentWebsite);
 
         this.successMessage = "Added!";
@@ -246,12 +215,7 @@ export default {
           this.successMessage = "";
         }, 1000);
       } else {
-        this.editUser(
-          this.currentId,
-          this.currentName,
-          this.currentEmail,
-          this.currentWebsite
-        );
+        this.editUser(this.currentId, this.currentName, this.currentEmail, this.currentWebsite);
         this.currentName = "";
         this.currentEmail = "";
         this.currentWebsite = "";
