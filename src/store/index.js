@@ -4,6 +4,7 @@ const state = {
   count: 0,
   users: [],
   todos: [],
+  photos: [],
 };
 
 const mutations = {
@@ -30,6 +31,18 @@ const mutations = {
   },
   deleteTodo(state, payload) {
     state.todos = payload;
+  },
+  createPhotos(state, payload) {
+    state.photos = payload;
+  },
+  addPhoto(state, payload) {
+    state.photos.push(payload);
+  },
+  editPhoto(state, payload) {
+    state.photos = payload;
+  },
+  deletePhoto(state, payload) {
+    state.photos = payload;
   },
 };
 

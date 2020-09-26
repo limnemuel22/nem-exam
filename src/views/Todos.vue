@@ -125,7 +125,7 @@ export default {
 
     function editTodo(id, completed, from) {
       from === "complete" ? (this.isLoadingIncomplete = true) : (this.isLoadingComplete = true);
-      axios.put(`https://jsonplaceholder.typicode.com/users/${id}`, { completed: !completed }).then(
+      axios.patch(`https://jsonplaceholder.typicode.com/users/${id}`, { completed: !completed }).then(
         ({ data }) => {
           const temp = todos.value.map((q) => {
             if (q.id === id) {
@@ -135,7 +135,7 @@ export default {
             }
             return q;
           });
-          store.commit("editUser", temp);
+          store.commit("editTodo", temp);
           this.isLoadingIncomplete = false;
           this.isLoadingComplete = false;
         },
@@ -172,7 +172,7 @@ export default {
     };
   },
   async mounted() {
-    const { data } = await axios.get("https://jsonplaceholder.typicode.com/todos");
+    const { data } = await axios.get("https://jsonplaceholder.typicode.com/todos?_limit=5");
     this.createTodos(data);
   },
 

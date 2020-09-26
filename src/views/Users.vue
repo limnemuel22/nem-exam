@@ -4,7 +4,7 @@
   </div>
   <div class="users" v-if="users.length > 0">
     <div class="container col-md-12 add-form" v-if="isFormShow">
-      <h1 class="text-left">{{ action }} new User</h1>
+      <h1 class="text-left">{{ action }} User</h1>
       <form>
         <div class="row text-left">
           <div class="form-group col-md-4">
@@ -29,7 +29,7 @@
             <input
               type="text"
               class="form-control"
-              id="email"
+              id="website"
               v-model="currentWebsite"
               placeholder="Enter Website"
               required
@@ -105,10 +105,11 @@ export default {
     }
 
     function editUser(id, name, email, website) {
-      axios.put(`https://jsonplaceholder.typicode.com/users/${id}`, { name, email, website }).then(
+      axios.patch(`https://jsonplaceholder.typicode.com/users/${id}`, { name, email, website }).then(
         ({ data }) => {
+          console.log(data);
           const temp = users.value.map((q) => {
-            if (data.id === q.id) {
+            if (id === q.id) {
               return {
                 ...q,
                 name: data.name,
@@ -119,6 +120,7 @@ export default {
               return q;
             }
           });
+          console.log(temp);
           store.commit("editUser", temp);
         },
         (error) => console.log(error)
@@ -145,12 +147,11 @@ export default {
     };
   },
   async mounted() {
-    const { data } = await axios.get("https://jsonplaceholder.typicode.com/users");
+    const { data } = await axios.get("https://jsonplaceholder.typicode.com/users?_limit=5");
     this.createUsers(data);
   },
   methods: {
     addForm() {
-      console.log("add");
       this.isFormShow = true;
       this.currentName = "";
       this.currentEmail = "";
@@ -197,7 +198,6 @@ export default {
         }, 1000);
       } else {
         this.editUser(this.currentId, this.currentName, this.currentEmail, this.currentWebsite);
-        this.isEditing = false;
         this.currentName = "";
         this.currentEmail = "";
         this.currentWebsite = "";

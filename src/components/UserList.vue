@@ -48,7 +48,7 @@ export default {
 <style scoped>
 .tableFixHead {
   overflow-y: auto;
-  height: 35rem;
+  height: 32rem;
   width: 100%;
   border-radius: 0.5rem;
 }
