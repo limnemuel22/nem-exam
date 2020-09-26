@@ -9,8 +9,17 @@
         <div class="row text-left">
           <div class="form-group col-md-4">
             <label for="Name">Name</label>
-            <input type="text" class="form-control" id="name" v-model="currentName" placeholder="Enter Name" required />
-            <small class="text-danger" v-if="nameErrorMessage">{{ nameErrorMessage }}</small>
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              v-model="currentName"
+              placeholder="Enter Name"
+              required
+            />
+            <small class="text-danger" v-if="nameErrorMessage">{{
+              nameErrorMessage
+            }}</small>
           </div>
           <div class="form-group col-md-4">
             <label for="exampleInputPassword1">Email</label>
@@ -22,7 +31,9 @@
               placeholder="Enter Email"
               required
             />
-            <small class="text-danger" v-if="emailErrorMessage">{{ emailErrorMessage }}</small>
+            <small class="text-danger" v-if="emailErrorMessage">{{
+              emailErrorMessage
+            }}</small>
           </div>
           <div class="form-group col-md-4">
             <label for="exampleInputPassword1">Website</label>
@@ -34,12 +45,26 @@
               placeholder="Enter Website"
               required
             />
-            <small class="text-danger" v-if="websiteErrorMessage">{{ websiteErrorMessage }}</small>
+            <small class="text-danger" v-if="websiteErrorMessage">{{
+              websiteErrorMessage
+            }}</small>
           </div>
 
           <div class="col-md-12">
-            <button type="submit" class="btn btn-secondary pull-right" @click="cancel">Cancel</button>
-            <button type="submit" class="btn btn-success mr-2 pull-right" @click="submit">Submit</button>
+            <button
+              type="submit"
+              class="btn btn-secondary pull-right"
+              @click="cancel"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="btn btn-success mr-2 pull-right"
+              @click="submit"
+            >
+              Submit
+            </button>
           </div>
         </div>
       </form>
@@ -47,12 +72,20 @@
     <br />
 
     <div class="col-md-12">
-      <div class="p-3 mb-2 bg-success text-white text-left" v-if="successMessage">
+      <div
+        class="p-3 mb-2 bg-success text-white text-left"
+        v-if="successMessage"
+      >
         User is Successfully {{ successMessage }}
       </div>
       <span class="pull-left ml-4"><h1>User List</h1></span>
       <div class="row pull-right mb-1 mr-3">
-        <button type="submit" v-if="!isFormShow" class="btn btn-success" @click="addForm">
+        <button
+          type="submit"
+          v-if="!isFormShow"
+          class="btn btn-success"
+          @click="addForm"
+        >
           <i class="fa fa-plus"></i> Add User
         </button>
       </div>
@@ -105,26 +138,32 @@ export default {
     }
 
     function editUser(id, name, email, website) {
-      axios.patch(`https://jsonplaceholder.typicode.com/users/${id}`, { name, email, website }).then(
-        ({ data }) => {
-          console.log(data);
-          const temp = users.value.map((q) => {
-            if (id === q.id) {
-              return {
-                ...q,
-                name: data.name,
-                email: data.email,
-                website: data.website,
-              };
-            } else {
-              return q;
-            }
-          });
-          console.log(temp);
-          store.commit("editUser", temp);
-        },
-        (error) => console.log(error)
-      );
+      axios
+        .patch(`https://jsonplaceholder.typicode.com/users/${id}`, {
+          name,
+          email,
+          website,
+        })
+        .then(
+          ({ data }) => {
+            console.log(data);
+            const temp = users.value.map((q) => {
+              if (id === q.id) {
+                return {
+                  ...q,
+                  name: data.name,
+                  email: data.email,
+                  website: data.website,
+                };
+              } else {
+                return q;
+              }
+            });
+            console.log(temp);
+            store.commit("editUser", temp);
+          },
+          (error) => console.log(error)
+        );
     }
 
     function deleteUser(id) {
@@ -147,7 +186,9 @@ export default {
     };
   },
   async mounted() {
-    const { data } = await axios.get("https://jsonplaceholder.typicode.com/users?_limit=5");
+    const { data } = await axios.get(
+      "https://jsonplaceholder.typicode.com/users?_limit=5"
+    );
     this.createUsers(data);
   },
   methods: {
@@ -179,14 +220,22 @@ export default {
     },
     submit(e) {
       e.preventDefault();
-      this.currentName === "" ? (this.nameErrorMessage = "Name is required!") : (this.nameErrorMessage = "");
+      this.currentName === ""
+        ? (this.nameErrorMessage = "Name is required!")
+        : (this.nameErrorMessage = "");
 
-      this.currentEmail === "" ? (this.emailErrorMessage = "Email is required!") : (this.emailErrorMessage = "");
+      this.currentEmail === ""
+        ? (this.emailErrorMessage = "Email is required!")
+        : (this.emailErrorMessage = "");
       this.currentWebsite === ""
         ? (this.websiteErrorMessage = "Website is required!")
         : (this.websiteErrorMessage = "");
 
-      if (this.currentName === "" || this.currentEmail === "" || this.currentWebsite === "") {
+      if (
+        this.currentName === "" ||
+        this.currentEmail === "" ||
+        this.currentWebsite === ""
+      ) {
         return;
       }
       if (!this.currentId || this.currentId === "") {
@@ -197,7 +246,12 @@ export default {
           this.successMessage = "";
         }, 1000);
       } else {
-        this.editUser(this.currentId, this.currentName, this.currentEmail, this.currentWebsite);
+        this.editUser(
+          this.currentId,
+          this.currentName,
+          this.currentEmail,
+          this.currentWebsite
+        );
         this.currentName = "";
         this.currentEmail = "";
         this.currentWebsite = "";
@@ -220,6 +274,9 @@ export default {
 </script>
 
 <style scoped>
+.users {
+  margin-top: -2rem;
+}
 .add-form {
   padding: 1rem 1rem 1rem 1rem;
   max-width: 95%;
