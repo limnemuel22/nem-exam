@@ -17,12 +17,23 @@
               placeholder="Enter Title"
               required
             />
-            <small class="text-danger" v-if="titleErrorMessage">{{ titleErrorMessage }}</small>
+            <small class="text-danger" v-if="titleErrorMessage">{{
+              titleErrorMessage
+            }}</small>
           </div>
           <div class="form-group col-md-4">
             <label for="Url">Url</label>
-            <input type="url" class="form-control" id="url" v-model="currentUrl" placeholder="Enter Url" required />
-            <small class="text-danger" v-if="urlErrorMessage">{{ urlErrorMessage }}</small>
+            <input
+              type="url"
+              class="form-control"
+              id="url"
+              v-model="currentUrl"
+              placeholder="Enter Url"
+              required
+            />
+            <small class="text-danger" v-if="urlErrorMessage">{{
+              urlErrorMessage
+            }}</small>
           </div>
           <div class="form-group col-md-4">
             <label for="Thumbnail">Thumbnail</label>
@@ -34,12 +45,26 @@
               placeholder="Enter Thumbnail"
               required
             />
-            <small class="text-danger" v-if="thumbnailErrorMessage">{{ thumbnailErrorMessage }}</small>
+            <small class="text-danger" v-if="thumbnailErrorMessage">{{
+              thumbnailErrorMessage
+            }}</small>
           </div>
 
           <div class="col-md-12">
-            <button type="submit" class="btn btn-secondary pull-right" @click="cancel">Cancel</button>
-            <button type="submit" class="btn btn-success mr-2 pull-right" @click="submit">Submit</button>
+            <button
+              type="submit"
+              class="btn btn-secondary pull-right"
+              @click="cancel"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="btn btn-success mr-2 pull-right"
+              @click="submit"
+            >
+              Submit
+            </button>
           </div>
         </div>
       </form>
@@ -50,7 +75,12 @@
     <div class="row">
       <div class="col-md-6 photo-title"><h1>Photo Gallery</h1></div>
       <div class="col-md-6 add-button">
-        <button type="submit" v-if="!isFormShow" class="btn btn-success" @click="addForm">
+        <button
+          type="submit"
+          v-if="!isFormShow"
+          class="btn btn-success"
+          @click="addForm"
+        >
           <i class="fa fa-plus"></i> Add Photo
         </button>
       </div>
@@ -121,28 +151,34 @@ export default {
 
     function editPhoto(id, title, url, thumbnailUrl) {
       this.isLoading = true;
-      axios.put(`https://jsonplaceholder.typicode.com/photos/${id}`, { title, url, thumbnailUrl }).then(
-        ({ data }) => {
-          const temp = photos.value.map((q) => {
-            if (id === q.id) {
-              return {
-                ...q,
-                title: data.title,
-                url: data.url,
-                thumbnailUrl: data.thumbnailUrl,
-              };
-            } else {
-              return q;
-            }
-          });
-          store.commit("editPhoto", temp);
-          this.isLoading = false;
-        },
-        (error) => {
-          console.log(error);
-          this.isLoading = false;
-        }
-      );
+      axios
+        .put(`https://jsonplaceholder.typicode.com/photos/${id}`, {
+          title,
+          url,
+          thumbnailUrl,
+        })
+        .then(
+          ({ data }) => {
+            const temp = photos.value.map((q) => {
+              if (id === q.id) {
+                return {
+                  ...q,
+                  title: data.title,
+                  url: data.url,
+                  thumbnailUrl: data.thumbnailUrl,
+                };
+              } else {
+                return q;
+              }
+            });
+            store.commit("editPhoto", temp);
+            this.isLoading = false;
+          },
+          (error) => {
+            console.log(error);
+            this.isLoading = false;
+          }
+        );
     }
 
     function deletePhoto(id) {
@@ -161,7 +197,14 @@ export default {
       );
     }
 
+    function validateUrl(url) {
+      return /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\\/]))?/.test(
+        url
+      );
+    }
+
     return {
+      validateUrl,
       deletePhoto,
       editPhoto,
       addPhoto,
@@ -170,7 +213,9 @@ export default {
     };
   },
   async mounted() {
-    const { data } = await axios.get("https://jsonplaceholder.typicode.com/photos?_limit=5");
+    const { data } = await axios.get(
+      "https://jsonplaceholder.typicode.com/photos?_limit=5"
+    );
     this.createPhotos(data);
   },
   methods: {
@@ -208,25 +253,48 @@ export default {
     submit(e) {
       e.preventDefault();
       console.log(this.currentId);
-      this.currentTitle === "" ? (this.titleErrorMessage = "Title is required!") : (this.titleErrorMessage = "");
+      this.currentTitle === ""
+        ? (this.titleErrorMessage = "Title is required!")
+        : (this.titleErrorMessage = "");
 
-      this.currentUrl === "" ? (this.urlErrorMessage = "Url is required!") : (this.urlErrorMessage = "");
+      this.currentUrl === ""
+        ? (this.urlErrorMessage = "Url is required!")
+        : (this.urlErrorMessage = "");
       this.currentThumbnail === ""
         ? (this.thumbnailErrorMessage = "ThumbnailUrl is required!")
         : (this.thumbnailErrorMessage = "");
 
-      if (this.currentTitle === "" || this.currentUrl === "" || this.currentThumbnail === "") {
+      if (
+        this.currentTitle === "" ||
+        this.currentUrl === "" ||
+        this.currentThumbnail === ""
+      ) {
         return;
       }
       if (!this.currentId || this.currentId === "") {
-        this.addPhoto(this.currentTitle, this.currentUrl, this.currentThumbnail);
+        if (!this.validateUrl(this.currentUrl)) {
+          return (this.urlErrorMessage = "Invalid Url");
+        }
+        if (!this.validateUrl(this.currentThumbnail)) {
+          return (this.thumbnailErrorMessage = "Invalid Thumbnail Url");
+        }
+        this.addPhoto(
+          this.currentTitle,
+          this.currentUrl,
+          this.currentThumbnail
+        );
 
         this.successMessage = "Added!";
         setTimeout(() => {
           this.successMessage = "";
         }, 1000);
       } else {
-        this.editPhoto(this.currentId, this.currentTitle, this.currentUrl, this.currentThumbnail);
+        this.editPhoto(
+          this.currentId,
+          this.currentTitle,
+          this.currentUrl,
+          this.currentThumbnail
+        );
         this.currentTitle = "";
         this.currentUrl = "";
         this.currentThumbnail = "";
