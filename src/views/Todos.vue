@@ -247,7 +247,7 @@ export default {
   transform: translate(-50%, -50%);
 }
 .card {
-  border-radius: 7%;
+  border-radius: 0.5rem;
   border: solid #444242;
 }
 </style>

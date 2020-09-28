@@ -323,7 +323,7 @@ export default {
 .add-form {
   padding: 1rem 1rem 1rem 1rem;
   border: solid #444242;
-  border-radius: 7%;
+  border-radius: 0.5rem;
 }
 .loader {
   margin: 0;
